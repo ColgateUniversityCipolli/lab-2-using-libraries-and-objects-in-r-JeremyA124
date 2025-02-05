@@ -11,7 +11,7 @@ artists <- c()
 output <- c()
 code.to.process <- c()
 
-#Fills the album vector with the album subdirectories
+#Fills the album vector with the album sub directories
 for(i in 1:length(album.num)){
   album[i] = low.directory[album.num[i]]
 }

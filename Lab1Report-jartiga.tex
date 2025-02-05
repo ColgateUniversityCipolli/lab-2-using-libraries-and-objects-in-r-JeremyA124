@@ -1,0 +1,213 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{xcolor}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlsng}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hldef}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{natbib} %for the bibliography
+\setlength{\bibsep}{0pt plus 0.3ex}
+\bibliographystyle{apalike} %sets bibliography to apa citation
+\usepackage[margin = 0.5in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks = true,citecolor=black}
+\usepackage{float}
+\usepackage{multicol}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\vspace{-1in}
+
+\title{Lab 2 Report -- Math240 -- Compuational Statitsics}
+\author{
+  Jeremy Artiga \\
+  No Affiliation \\
+  No Department \\
+  {\tt{jartiga@colgate.edu}}
+}
+
+\date{}
+
+\maketitle
+
+\begin{multicols}{2}
+\begin{abstract}
+In this lab, we will examine a set of non-copyrighted \texttt{.WAV} files
+from a Music directory using Base \texttt{R} commands and packages. More specifically,
+we will analyze data within the \texttt{.WAV} files to build a batch file of 
+commands that will allow data processing within the open-source program Essentia,
+which allows for music analysis, description, and synthesis. Our batch file will
+allow us to process \emph{large} sets of \texttt{.WAV} files within Essentia within
+seconds w/o the need to process each file manually. We will also experiment with the
+\texttt{jsonlite} package, which allows us to extract musical analysis data from
+given .JSON files.
+\end{abstract}
+
+\textbf{Keywords:} This lab will enable us to practice (1) installing, loading, and learning
+about libraries/packages; (2) working with character objects; (3) writing \texttt{for()} loops;
+and (4) creating/accessing elements within vectors and lists
+
+\section{Introduction}
+For this lab, we will:
+
+\begin{enumerate}
+  \item Install the \texttt{stringr} package for \texttt{R} \citep{stringr}. 
+  \item Figure out the commands needed to access a directories and \texttt{.WAV} files 
+  within a Music directory. 
+  \item Create character/vector/list objects to store data within a Music
+  directory.
+  \item Utilize \texttt{for()} loops to iterate through vector/lists
+  to search/mutate data in a Music directory. 
+  \item Utilize functions in the \texttt{stringr} package to subset
+  and track \texttt{.WAV} file data. 
+  \item Write to a \texttt{.txt} file using \texttt{writeLines()}. 
+  \item Install and load the \texttt{jsonlite} package for \texttt{R}.
+  \item Utilize the \texttt{jsonlite} package to load musical analysis
+  data. \citep{jsonlite}
+  \item Utilize objects to save necessary musical data.
+\end{enumerate}
+
+\columnbreak
+
+\section{Methodology}
+In this section we will go through the process of loading the needed directory/files and 
+packages; creating objects; and utilizing coding structures to accomplish our objectives. \\
+
+We ultimately want to write command lines in the following format: 
+\begin{center}
+\begin{footnotesize}
+  \texttt{streaming}\verb|_|\texttt{extractor}\verb|_|\texttt{music.exe "EXAMPLE.wav" "EXAMPLE.json"}
+\end{footnotesize}
+\end{center}
+
+\subsection{Package and Object Set Up}
+We will explore a file directory called MUSIC, which contains all the \texttt{.WAV} files we will
+examine, this directory will be downloaded and saved into the same directory as our \texttt{R} script.
+
+We will then begin our R script by loading the \texttt{stringr} package using \texttt{library()}, this
+will allows us to perform string mutations. Now, we setup the objects which will store the subsets of our
+directory (i.e. albums, song lists, etc.) using descriptive variable naming. All the objects will correspond
+to data we need to store in order to write our Essentia command lines.
+
+\subsection{Code Structures}
+
+\subsubsection{Subsetting File Data}
+In order to write our batch file command lines, we will need to go through every \texttt{.WAV} file
+in the sub directories of the MUSIC directory, these sub directories are the albums of our
+\texttt{.WAV} files (i.e. song files). \\
+
+We will begin by utilizing a \texttt{for()} loop to gather all the paths of the albums sub directories within the MUSIC directory. In other words, we are getting all the albums stored in the MUSIC directory. \\
+
+We then have to go through each album sub directory to obtain all the \texttt{.WAV} files in the directory.
+This will require the use of nested \texttt{for()} loops, one for the album directories and one for the
+\texttt{.WAV} files. This will give us all of the \texttt{.WAV} files. \\
+
+Next we will have to gather all the \texttt{.WAV} files and and all our album directories and construct full 
+directory paths with the albums and songs we obtained earlier. We will utilize another nested \texttt{for()} 
+loop for this task as well. I also added in a structure that filters the \texttt{.WAV} files from the album
+directory.
+
+\pagebreak
+
+\subsubsection{Constructing Batch File Commands}
+Now we have to grab only the artists names and track names using the \texttt{stringr} package. By utilizing
+the naming convention for files, we can subset the track and artists names using \texttt{str}\verb|_|\texttt{sub()}
+and \texttt{str}\verb|_|\texttt{split()}, we'll perform this operation on all the \texttt{.WAV} files using a \texttt{for()} loop. \\
+
+We will construct the \texttt{.json} output files by pasting the artists names, album name, and track name
+together with a \texttt{.json} extension at the end using the \texttt{paste()} function.
+The following format is as follows:
+
+\begin{center}
+\begin{footnotesize}
+\texttt{[artist name]-[album name]-[track name].json}
+\end{footnotesize}
+\end{center}
+
+Finally, we will paste together the string \\
+"streaming\verb|_|extractor\verb|_|music.exe" with our \texttt{.WAV} file
+name and our \texttt{.json} file name to produce the batch file command lines.
+
+Using the \texttt{writeLines()} we can write our batch file commands into a TXT file called batfile.txt,
+which will contain all the music processing command lines for Essentia to execute.
+
+\subsection{Extracting Data Using the \texttt{jsonlite} Package}
+Suppose we have a .JSON output song file we want to analyze. We can use the \texttt{jsonlite} package to obtain
+all sorts of musical data. From the key, tone, all the way to danceability!
+To illustrate this, we will will use the .JSON output for "Au Revoir (Adios) on the Talon Of The Hawk" album by The Front Bottoms. \\
+
+We will firstly load the \texttt{jsonlite} package using the \texttt{library()} function. Then we want to use
+\texttt{str}\verb|_|\texttt{split()} to extract the artists, album, and track names form the file. This will
+be useful for a later project.  \\
+
+Now we want to load the JSON file into \texttt{R} using the \texttt{fromJSON()} function. This will load a list
+of all the musical data attributed to our file.
+Finally, we want to extract the data in the resulting list and store the into objects. We can do this by
+accessing lower-level elements in the list (much like a directory) using \verb|$| syntax.
+
+\columnbreak
+
+\section{Discussion}
+By utilizing packages and base \texttt{R} coding structures such as \texttt{for()} loops, objects, and accessing
+elements within vectors/lists, we were able to create an Essentia command batch file from examination of 
+\texttt{.WAV} files in the music directory. This not only enabled us to practice our abilities to utilize the said
+coding structures, but it also allowed us to build an \texttt{R} program which could analyze any sort of directory
+and pull the \texttt{.WAV} files for the sake of data processing into Essentia. We also figured out how to extract
+data from .JSON files using the \texttt{jsonlite} package to gather information on specific albums/songs, which we could potential utilize to analyze songs and make general insights based on this analysis in another project.
+
+\begin{footnotesize}
+\bibliography{bib}
+\end{footnotesize}
+
+
+
+
+
+
+ 
+\end{multicols}{2}
+\end{document}
