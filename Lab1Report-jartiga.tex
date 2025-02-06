@@ -49,14 +49,29 @@
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
 \usepackage{alltt}
-\usepackage{natbib} %for the bibliography
+
+\usepackage{amsmath} %This allows me to use the align functionality.
+                     %If you find yourself trying to replicate
+                     %something you found online, ensure you're
+                     %loading the necessary packages!
+\usepackage{amsfonts}%Math font
+\usepackage{graphicx}%For including graphics
+\usepackage{hyperref}%For Hyperlinks
+\usepackage[shortlabels]{enumitem}% For enumerated lists with labels specified
+                                  % We had to run tlmgr_install("enumitem") in R
+\hypersetup{colorlinks = true,citecolor=black} %set citations to have black (not green) color
+\usepackage{natbib}        %For the bibliography
 \setlength{\bibsep}{0pt plus 0.3ex}
-\bibliographystyle{apalike} %sets bibliography to apa citation
-\usepackage[margin = 0.5in]{geometry}
-\usepackage{hyperref}
-\hypersetup{colorlinks = true,citecolor=black}
+\bibliographystyle{apalike}%For the bibliography
+\usepackage[margin=0.50in]{geometry}
 \usepackage{float}
 \usepackage{multicol}
+
+%fix for figures
+\usepackage{caption}
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
@@ -76,15 +91,7 @@
 
 \begin{multicols}{2}
 \begin{abstract}
-In this lab, we will examine a set of non-copyrighted \texttt{.WAV} files
-from a Music directory using Base \texttt{R} commands and packages. More specifically,
-we will analyze data within the \texttt{.WAV} files to build a batch file of 
-commands that will allow data processing within the open-source program Essentia,
-which allows for music analysis, description, and synthesis. Our batch file will
-allow us to process \emph{large} sets of \texttt{.WAV} files within Essentia within
-seconds w/o the need to process each file manually. We will also experiment with the
-\texttt{jsonlite} package, which allows us to extract musical analysis data from
-given .JSON files.
+Music processing is a daunting task and can take hours of your time, sometimes even days or weeks! Thankfully, we can utilize base R to construct a batch file which will proceess music for us, which is our objective for this lab. We will also utlize the \texttt{jsonlite} package to extract data within .JSON music files.
 \end{abstract}
 
 \textbf{Keywords:} This lab will enable us to practice (1) installing, loading, and learning
@@ -92,7 +99,17 @@ about libraries/packages; (2) working with character objects; (3) writing \textt
 and (4) creating/accessing elements within vectors and lists
 
 \section{Introduction}
-For this lab, we will:
+In this lab, We will examine a set of non-copyrighted \texttt{.WAV} files
+from a Music directory using Base \texttt{R} commands and packages. More specifically,
+we will analyze data within the \texttt{.WAV} files to build a batch file of 
+commands that will allow data processing within the open-source program Essentia,
+which allows for music analysis, description, and synthesis. Our batch file will
+allow us to process \emph{large} sets of \texttt{.WAV} files within Essentia within
+seconds w/o the need to process each file manually. We will also experiment with the
+\texttt{jsonlite} package, which allows us to extract musical analysis data from
+given .JSON files. \\
+
+\noindent Some of the things we will do in this lab include:
 
 \begin{enumerate}
   \item Install the \texttt{stringr} package for \texttt{R} \citep{stringr}. 
@@ -110,8 +127,6 @@ For this lab, we will:
   data. \citep{jsonlite}
   \item Utilize objects to save necessary musical data.
 \end{enumerate}
-
-\columnbreak
 
 \section{Methodology}
 In this section we will go through the process of loading the needed directory/files and 
@@ -151,8 +166,6 @@ directory paths with the albums and songs we obtained earlier. We will utilize a
 loop for this task as well. I also added in a structure that filters the \texttt{.WAV} files from the album
 directory.
 
-\pagebreak
-
 \subsubsection{Constructing Batch File Commands}
 Now we have to grab only the artists names and track names using the \texttt{stringr} package. By utilizing
 the naming convention for files, we can subset the track and artists names using \texttt{str}\verb|_|\texttt{sub()}
@@ -191,7 +204,7 @@ accessing lower-level elements in the list (much like a directory) using \verb|$
 
 \columnbreak
 
-\section{Discussion}
+\section{Results}
 By utilizing packages and base \texttt{R} coding structures such as \texttt{for()} loops, objects, and accessing
 elements within vectors/lists, we were able to create an Essentia command batch file from examination of 
 \texttt{.WAV} files in the music directory. This not only enabled us to practice our abilities to utilize the said
@@ -199,15 +212,18 @@ coding structures, but it also allowed us to build an \texttt{R} program which c
 and pull the \texttt{.WAV} files for the sake of data processing into Essentia. We also figured out how to extract
 data from .JSON files using the \texttt{jsonlite} package to gather information on specific albums/songs, which we could potential utilize to analyze songs and make general insights based on this analysis in another project.
 
+\section{Discussion}
+In this lab, we discovered how to create batch files using base \texttt{R} and it's libraries and how to utlize the \texttt{jsonlite} to extract musical data from .JSON files. We can now utilize this program to construct batch files for any \texttt{.WAV} file within a directory, this will come in hadny when we wan to process msuci using Essentia without doing all the hard word! Furthermore, our introduction of the \texttt{jsonlite} package will help us extract data for anlysis in a later project, where we'll automate this for numerous .JSON files and possibly analyze the data we extracted.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{footnotesize}
 \bibliography{bib}
 \end{footnotesize}
 
-
-
-
-
-
- 
 \end{multicols}{2}
 \end{document}
